@@ -1,5 +1,6 @@
 package com.tenniscourts.reservations;
 
+import com.tenniscourts.exceptions.BusinessException;
 import com.tenniscourts.exceptions.EntityNotFoundException;
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
@@ -17,7 +18,11 @@ public class ReservationService {
     private final ReservationMapper reservationMapper;
 
     public ReservationDTO bookReservation(CreateReservationRequestDTO createReservationRequestDTO) {
-        throw new UnsupportedOperationException();
+        Reservation reservation = reservationMapper.map(createReservationRequestDTO);
+        if (reservation == null) {
+            throw  new BusinessException("Unable to book the reservation");
+        }
+        return reservationMapper.map(reservation);
     }
 
     public ReservationDTO findReservation(Long reservationId) throws EntityNotFoundException {
